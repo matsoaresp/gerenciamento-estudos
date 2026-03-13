@@ -45,7 +45,10 @@ export class MateriaService {
     if (!materia){
       throw new NotFoundException('Materia não encontrada!')
     }
-    return materia
+    return {
+      ...materia,
+      userId: materia.user?.id
+    }
   }
 
   async update(id: number, updateMateriaDto: UpdateMateriaDto) {
@@ -70,7 +73,7 @@ export class MateriaService {
       throw new NotFoundException('Materia não encontrada')
     }
 
-    await this.materiaRepository.delete(materia);
+    await this.materiaRepository.delete(id);
     return {message: 'Matéria removida com sucesso'};
   }
 }
