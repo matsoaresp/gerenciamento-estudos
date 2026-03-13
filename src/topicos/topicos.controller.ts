@@ -18,17 +18,17 @@ export class TopicosController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.topicosService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.topicosService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTopicoDto: UpdateTopicoDto) {
-    return this.topicosService.update(+id, updateTopicoDto);
+  update(@Param('id') id: number, @Body() updateTopicoDto: UpdateTopicoDto) {
+    return this.topicosService.update(id, updateTopicoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.topicosService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.topicosService.remove(id);
   }
 }

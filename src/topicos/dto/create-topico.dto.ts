@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsSemVer, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsSemVer, IsString } from "class-validator";
 
 export class CreateTopicoDto {
 
@@ -9,6 +9,12 @@ export class CreateTopicoDto {
     @IsNotEmpty()
     @IsString()
     descricao: string
+
+    @IsNumber()
+    userId:number
+
+    @IsNumber()
+    materiaId: number
 
     
 }

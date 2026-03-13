@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTopicoDto } from './dto/create-topico.dto';
 import { UpdateTopicoDto } from './dto/update-topico.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -17,8 +17,23 @@ export class TopicosService {
     private readonly userService: UserService,
     private readonly materiaService: MateriaService
   ){}
-  create(createTopicoDto: CreateTopicoDto) {
-    return 'This action adds a new topico';
+  async create(createTopicoDto: CreateTopicoDto) {
+      const user = await this.userService.findOne(createTopicoDto.userId)
+      if (!user){
+        throw new NotFoundException('Usuario não encontrado')
+      }
+      const materia = await this.materiaService.findOne(createTopicoDto.materiaId)
+      if (!materia) {
+        throw new NotFoundException('Materia não encontrada')
+      }
+
+      const topico = this.topicoRepository.create({
+        titulo: createTopicoDto.titulo,
+        descricao: createTopicoDto.descricao,
+        materia 
+      })
+
+      return await this.topicoRepository.save(topico)
   }
 
   findAll() {

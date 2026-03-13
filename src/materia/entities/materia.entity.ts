@@ -19,4 +19,5 @@ export class Materia {
 
     @Column({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
     createdAt: Date 
+
 }
