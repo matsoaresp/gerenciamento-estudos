@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Materia } from "src/materia/entities/materia.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -15,6 +16,7 @@ export class User {
     @Column() 
     password: string;
 
-    
+    @OneToMany(() => Materia, (materia) => materia.user)
+    materias: Materia[];
 
 }
