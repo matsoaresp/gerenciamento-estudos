@@ -1,1 +1,5 @@
-export class CreateTopicoDto {}
+export class CreateTopicoDto {
+
+
+    
+}
