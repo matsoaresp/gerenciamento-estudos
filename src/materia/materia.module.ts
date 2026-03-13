@@ -11,6 +11,7 @@ import { UserModule } from 'src/user/user.module';
   imports: [
     TypeOrmModule.forFeature([Materia]),
     UserModule,
-  ]
+  ],
+  exports: [MateriaService]
 })
 export class MateriaModule {}
