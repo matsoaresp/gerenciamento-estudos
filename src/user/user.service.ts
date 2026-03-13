@@ -13,7 +13,9 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ){}
   async create(createUserDto: CreateUserDto) {
-    const create =  await this.userRepository.create(createUserDto);
+
+    
+    const create = this.userRepository.create(createUserDto);
     return await this.userRepository.save(create);
   }
 
@@ -50,7 +52,14 @@ export class UserService {
     return await this.userRepository.save(user)
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} users`;
+  async remove(id: number) {
+    const user = await this.findOne(id)
+
+    if (!user){
+      throw new NotFoundException('Usuaio não encontrado')
+    }
+
+    await this.userRepository.delete(user)
+    return {message: 'Usuario removido'}
   }
 }

@@ -4,10 +4,13 @@ import { AppController } from './app.controller';
 import { UserModule } from '../user/user.module';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MateriaModule } from 'src/materia/materia.module';
+import { UserService } from 'src/user/user.service';
 
 @Module({
   imports: [
     UserModule,
+    MateriaModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
