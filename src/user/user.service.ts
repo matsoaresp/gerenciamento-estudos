@@ -21,6 +21,7 @@ export class UserService {
 
   async findAll() {
     const users = await this.userRepository.find({
+      relations: ['materias', 'materias.topico'],
       order:{
         id: 'asc'
       }

@@ -30,18 +30,32 @@ export class TopicosService {
       const topico = this.topicoRepository.create({
         titulo: createTopicoDto.titulo,
         descricao: createTopicoDto.descricao,
-        materia 
+        materia
       })
 
       return await this.topicoRepository.save(topico)
   }
 
-  findAll() {
-    return `This action returns all topicos`;
+  async findAll() {
+
+    return this.topicoRepository.find({
+      relations: ['materia']
+    })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} topico`;
+  async findOne(id: number) {
+    const topico = await this.topicoRepository.findOne({
+      where: {id},
+      relations: ['materia']
+    })
+    if (!topico) {
+      throw new NotFoundException('Topico não encontrado')
+    }
+
+    return {
+      ...topico,
+      userId: topico.materia?.id
+    }
   }
 
   update(id: number, updateTopicoDto: UpdateTopicoDto) {

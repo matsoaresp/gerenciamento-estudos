@@ -22,8 +22,12 @@ export class Topico {
     })
     status: TopicosEnum
     
-    @ManyToOne(() => Materia, {onDelete: 'CASCADE'})
-    @JoinColumn({name: 'materia_id'})
-    materia: Materia
+    @ManyToOne(() => Materia, (materia) => materia.topico, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'materiaId' })
+    materia: Materia;
+
+    @ManyToOne(() => User, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'userId' })
+    user: User;
 
 }
