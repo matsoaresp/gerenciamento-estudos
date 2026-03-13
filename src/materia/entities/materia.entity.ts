@@ -15,7 +15,7 @@ export class Materia {
 
     @ManyToOne(() => User, {onDelete: 'CASCADE'})
     @JoinColumn({name: 'userId'})
-    userId: User;
+    user: User;
 
     @Column({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
     createdAt: Date 

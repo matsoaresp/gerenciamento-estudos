@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class CreateMateriaDto {
 
@@ -9,4 +9,7 @@ export class CreateMateriaDto {
     @IsNotEmpty()
     @IsString()
     descricao: string;
+
+    @IsNumber()
+    userId: number;
 }
