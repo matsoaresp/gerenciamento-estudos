@@ -6,6 +6,7 @@ import { Topico } from './entities/topico.entity';
 import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 import { MateriaService } from 'src/materia/materia.service';
+import { Not } from 'typeorm/browser';
 
 @Injectable()
 export class TopicosService {
@@ -58,11 +59,25 @@ export class TopicosService {
     }
   }
 
-  update(id: number, updateTopicoDto: UpdateTopicoDto) {
-    return `This action updates a #${id} topico`;
+  async update(id: number, updateTopicoDto: UpdateTopicoDto) {
+   
+    const topico = await this.topicoRepository.preload({
+      id,
+      ...updateTopicoDto
+    });
+
+    if (!topico){
+      throw new NotFoundException('Topico não encontrado')
+    }
+    return this.topicoRepository.save(topico)     
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} topico`;
+  async remove(id: number) {
+    const topico = await this.findOne(id)
+    if (!topico){
+      throw new NotFoundException
+    }
+
+    return await this.topicoRepository.delete(id)
   }
 }
