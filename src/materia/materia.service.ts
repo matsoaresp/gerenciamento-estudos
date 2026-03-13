@@ -21,13 +21,15 @@ export class MateriaService {
   }
 
   async findAll() {
-    return this.materiaRepository.find()
+    return this.materiaRepository.find({
+      relations: ['user']
+    });
   }
 
   async findOne(id: number) {
     const materia = await this.materiaRepository.findOne({
       where: {id},
-      relations: ['userId']
+      relations: ['user']
     });
     if (!materia){
       throw new NotFoundException('Materia não encontrada!')
@@ -55,6 +57,13 @@ export class MateriaService {
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} materia`;
+    const materia  = await this.findOne(id)
+
+    if (!materia) {
+      throw new NotFoundException('Materia não encontrada');
+    }
+
+    await this.materiaRepository.delete(materia);
+    return {message: 'Matéria removida com sucesso'};
   }
 }
