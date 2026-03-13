@@ -7,12 +7,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MateriaModule } from 'src/materia/materia.module';
 import { UserService } from 'src/user/user.service';
 import { TopicosModule } from 'src/topicos/topicos.module';
+import { ProgressoModule } from 'src/progresso/progresso.module';
 
 @Module({
   imports: [
     UserModule,
     MateriaModule,
     TopicosModule,
+    ProgressoModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
