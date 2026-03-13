@@ -1,11 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProgressoDto } from './dto/create-progresso.dto';
 import { UpdateProgressoDto } from './dto/update-progresso.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Progresso } from './entities/progresso.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ProgressoService {
+
+  constructor(
+    @InjectRepository(Progresso)
+    private readonly progressoRepository: Repository<Progresso>,
+    
+  ){}
   create(createProgressoDto: CreateProgressoDto) {
-    return 'This action adds a new progresso';
+     
   }
 
   findAll() {
