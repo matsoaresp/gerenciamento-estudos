@@ -16,7 +16,18 @@ export class MateriaService {
 
   ) {}
   async create(createMateriaDto: CreateMateriaDto){
-    const materia = this.materiaRepository.create(createMateriaDto)
+
+    const user = await this.userService.findOne(createMateriaDto.userId)
+
+    if (!user){
+      throw new NotFoundException('Usuario não encontrado no Banco')
+    }
+    const materia = this.materiaRepository.create({ 
+      nome: createMateriaDto.nome,
+      descricao: createMateriaDto.descricao,
+      user,
+      
+  })
     return await this.materiaRepository.save(materia)
   }
 
@@ -39,11 +50,7 @@ export class MateriaService {
 
   async update(id: number, updateMateriaDto: UpdateMateriaDto) {
 
-    const user = await this.userService.findOne(id)
-
-    if (!user){
-      throw new NotFoundException('Usuario não encontrado')
-    }
+    
     const materia = await this.materiaRepository.preload({
       id,
       ...updateMateriaDto
@@ -60,7 +67,7 @@ export class MateriaService {
     const materia  = await this.findOne(id)
 
     if (!materia) {
-      throw new NotFoundException('Materia não encontrada');
+      throw new NotFoundException('Materia não encontrada')
     }
 
     await this.materiaRepository.delete(materia);
