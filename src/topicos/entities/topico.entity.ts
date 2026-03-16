@@ -1,4 +1,3 @@
-import { IsEnum } from "class-validator";
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { TopicosEnum } from "../enum/topicos.enum";
 import { Materia } from "src/materia/entities/materia.entity";
