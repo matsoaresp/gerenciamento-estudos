@@ -12,10 +12,10 @@ export class Progresso {
     topico: Topico;
 
     @Column({default: 0})
-    porcentagem: 0
+    porcentagem: number
 
-    @Column()
-    horas_estudadas: number
+    @Column({name: 'horas_estudadas'})
+    horasEstudadas: number
 
     @Column({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
     updatedAt: Date
