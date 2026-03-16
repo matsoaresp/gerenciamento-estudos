@@ -31,11 +31,16 @@ export class ProgressoService {
   }
 
   findAll() {
-    return `This action returns all progresso`;
+    return this.progressoRepository.find({
+      relations: ['topico']
+    });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} progresso`;
+    return this.progressoRepository.findOne({
+      where: { id },
+      relations: ['topico']
+    });
   }
 
   async update(id: number, updateProgressoDto: UpdateProgressoDto) {
@@ -49,7 +54,16 @@ export class ProgressoService {
     return await this.progressoRepository.save(progress)
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} progresso`;
+  async remove(id: number) {
+
+    const progress = await this.progressoRepository.findOne({
+      where: { id }
+    });
+
+    if (!progress) {
+      throw new NotFoundException('Progresso não encontrado');
+    }
+
+    return this.progressoRepository.remove(progress);
   }
 }

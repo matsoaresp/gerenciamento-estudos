@@ -12,7 +12,7 @@ export class Progresso {
     topico: Topico
 
     @Column({default: 0})
-    porcentagem: number
+    porcentagem: number;
 
     @Column({name: 'horas_estudadas'})
     horasEstudadas: number
