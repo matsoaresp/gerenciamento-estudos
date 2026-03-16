@@ -4,21 +4,31 @@ import { UpdateMetaDto } from './dto/update-meta.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Metas } from './entities/meta.entity';
 import { Repository } from 'typeorm';
+import { Topico } from 'src/topicos/entities/topico.entity';
 
 @Injectable()
 export class MetasService {
 
   constructor(
     @InjectRepository(Metas)
-    private readonly metasRepository: Repository<Metas>
+    private readonly metasRepository: Repository<Metas>,
+    @InjectRepository(Topico)
+    private readonly topicosRepository: Repository<Topico>,
     
   ){}
   async create(createMetaDto: CreateMetaDto) {
+
+    const topico = await this.topicosRepository.findOne({ where: { id: createMetaDto.topicoId } });
+
+    if (!topico) {
+      throw new NotFoundException('Topico não encontrado')
+    }
     const meta = this.metasRepository.create({
       titulo: createMetaDto.titulo,
       descricao: createMetaDto.descricao,
       horasMeta: createMetaDto.horasMeta,
       horasAtual: createMetaDto.horasAtual,
+      topico
     })
 
     if (!meta){

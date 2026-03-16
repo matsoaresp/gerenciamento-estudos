@@ -31,10 +31,13 @@ export class ProgressoService {
     }
 
     const meta = await this.metasRepository.findOne({
-      where: {
-        topico: {id: createProgressoDto.topicoId}
-      }
-    })
+  where: {
+    topico: {
+      id: createProgressoDto.topicoId
+    }
+  },
+  relations: ['topico']
+})
 
     if(!meta) {
       throw new NotFoundException('Meta não encontrada')
