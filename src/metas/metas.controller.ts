@@ -18,17 +18,17 @@ export class MetasController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.metasService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.metasService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMetaDto: UpdateMetaDto) {
-    return this.metasService.update(+id, updateMetaDto);
+  update(@Param('id') id: number, @Body() updateMetaDto: UpdateMetaDto) {
+    return this.metasService.update(id, updateMetaDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.metasService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.metasService.remove(id);
   }
 }
