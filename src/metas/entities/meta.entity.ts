@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Topico } from "src/topicos/entities/topico.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Metas {
@@ -17,5 +18,10 @@ export class Metas {
 
     @Column()
     horasAtual: number;
+
+    @ManyToOne(() => Topico)
+    @JoinColumn()
+    topico: Topico
+
 
 }

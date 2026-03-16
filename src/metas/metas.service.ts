@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMetaDto } from './dto/create-meta.dto';
 import { UpdateMetaDto } from './dto/update-meta.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,19 +14,48 @@ export class MetasService {
     
   ){}
   async create(createMetaDto: CreateMetaDto) {
-    const  meta = this.
+    const meta = this.metasRepository.create({
+      titulo: createMetaDto.titulo,
+      descricao: createMetaDto.descricao,
+      horasMeta: createMetaDto.horasMeta,
+      horasAtual: createMetaDto.horasAtual,
+    })
+
+    if (!meta){
+      throw new NotFoundException('Erro ao criar tarefa')
+    }
+
+   return await this.metasRepository.save(meta)
   }
 
-  findAll() {
-    return `This action returns all metas`;
+  async findAll() {
+    return await this.metasRepository.find({
+      relations: ['topicos']
+    })    
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} meta`;
+  async findOne(id: number) {
+    const meta = this.metasRepository.findOne({
+      where: {id},
+      relations: ['topicos']
+    })
+
+    if (!meta) {
+      throw new NotFoundException ('Registro de meta não econtrado')
+    }
   }
 
-  update(id: number, updateMetaDto: UpdateMetaDto) {
-    return `This action updates a #${id} meta`;
+  async update(id: number, updateMetaDto: UpdateMetaDto) {
+    const meta =  await this.metasRepository.preload({
+      id,
+      ...updateMetaDto
+    })
+
+    if (!meta){
+      throw new NotFoundException('Registro de meta não encontrado')
+    }
+
+    return await this.metasRepository.save(meta)
   }
 
   remove(id: number) {
