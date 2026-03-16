@@ -9,12 +9,12 @@ export class Progresso {
 
     @OneToOne(() => Topico)
     @JoinColumn()
-    topico: Topico;
+    topico: Topico
 
     @Column({default: 0})
     porcentagem: number;
 
-    @Column()
+    @Column({name: 'horas_estudadas'})
     horasEstudadas: number
 
     @Column({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})

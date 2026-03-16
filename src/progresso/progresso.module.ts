@@ -13,6 +13,7 @@ import { Topico } from 'src/topicos/entities/topico.entity';
   imports: [
     TypeOrmModule.forFeature([Progresso, Topico]),
     TopicosModule,
-  ]
+  ],
+  exports: [ProgressoModule]
 })
 export class ProgressoModule {}

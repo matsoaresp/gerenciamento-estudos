@@ -4,6 +4,7 @@ import { UpdateProgressoDto } from './dto/update-progresso.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Progresso } from './entities/progresso.entity';
 import { Repository } from 'typeorm';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class ProgressoService {
@@ -11,17 +12,22 @@ export class ProgressoService {
   constructor(
     @InjectRepository(Progresso)
     private readonly progressoRepository: Repository<Progresso>,
-  ) {}
-
+    
+  ){}
   async create(createProgressoDto: CreateProgressoDto) {
 
+    
     const progress = this.progressoRepository.create({
       porcentagem: createProgressoDto.porcentagem,
       horasEstudadas: createProgressoDto.horasEstudadas,
-      topico: { id: createProgressoDto.topicoId }
-    });
+      topico: {id: createProgressoDto.topicoId }
+    })
 
-    return this.progressoRepository.save(progress);
+    if (!progress){
+      throw new NotFoundException('Não foi possivel criar o progresso')
+    }
+
+    return await this.progressoRepository.save(progress)
   }
 
   findAll() {
@@ -38,17 +44,14 @@ export class ProgressoService {
   }
 
   async update(id: number, updateProgressoDto: UpdateProgressoDto) {
-
     const progress = await this.progressoRepository.preload({
       id,
       ...updateProgressoDto
-    });
-
-    if (!progress) {
-      throw new NotFoundException('Dado do progresso não encontrado');
+    })
+    if (!progress){
+      throw new NotFoundException('Dado do progresso não encontrado')
     }
-
-    return this.progressoRepository.save(progress);
+    return await this.progressoRepository.save(progress)
   }
 
   async remove(id: number) {
