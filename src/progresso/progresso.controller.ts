@@ -18,17 +18,17 @@ export class ProgressoController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.progressoService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.progressoService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProgressoDto: UpdateProgressoDto) {
-    return this.progressoService.update(+id, updateProgressoDto);
+  update(@Param('id') id: number, @Body() updateProgressoDto: UpdateProgressoDto) {
+    return this.progressoService.update(id, updateProgressoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.progressoService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.progressoService.remove(id);
   }
 }
