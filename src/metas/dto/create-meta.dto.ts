@@ -1,17 +1,19 @@
-import { IsString } from "class-validator";
+import { IsNumber, IsString } from "class-validator";
 
 export class CreateMetaDto {
 
     @IsString()
-    titulo: string
+    titulo: string;
 
     @IsString()
     descricao: string;
 
-    @IsString()
+    @IsNumber()
     horasMeta: number;
 
-    @IsString()
+    @IsNumber()
     horasAtual: number;
 
-}
+    @IsNumber()
+    topicoId: number;
+}   

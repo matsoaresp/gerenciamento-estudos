@@ -26,7 +26,7 @@ export class Topico {
     @JoinColumn({ name: 'materiaId' })
     materia: Materia;
 
-    @OneToOne(() => Progresso, (progresso) => progresso.topico)
+    @OneToOne(() => Progresso, (progresso) => progresso.topico, {onDelete: 'CASCADE'})
     progresso: Progresso
 
     @ManyToOne(() => User, { onDelete: 'CASCADE' })

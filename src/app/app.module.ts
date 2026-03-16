@@ -8,6 +8,7 @@ import { MateriaModule } from 'src/materia/materia.module';
 import { UserService } from 'src/user/user.service';
 import { TopicosModule } from 'src/topicos/topicos.module';
 import { ProgressoModule } from 'src/progresso/progresso.module';
+import { MetasModule } from 'src/metas/metas.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ProgressoModule } from 'src/progresso/progresso.module';
     MateriaModule,
     TopicosModule,
     ProgressoModule,
+    MetasModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
