@@ -5,6 +5,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Progresso } from './entities/progresso.entity';
 import { Repository } from 'typeorm';
 import { NotFoundError } from 'rxjs';
+import { Topico } from 'src/topicos/entities/topico.entity';
+import { Metas } from 'src/metas/entities/meta.entity';
+import { TopicosEnum } from 'src/topicos/enum/topicos.enum';
 
 @Injectable()
 export class ProgressoService {
@@ -12,15 +15,55 @@ export class ProgressoService {
   constructor(
     @InjectRepository(Progresso)
     private readonly progressoRepository: Repository<Progresso>,
-    
+    @InjectRepository(Topico)
+    private readonly topicosRepository: Repository<Topico>,
+    @InjectRepository(Metas)
+    private readonly metasRepository: Repository<Metas>,
   ){}
   async create(createProgressoDto: CreateProgressoDto) {
 
-    
+    const topico = await this.topicosRepository.findOne({
+      where: {id: createProgressoDto.topicoId}
+    })
+
+    if (!topico) {
+      throw new NotFoundException('Topico não encontrado')
+    }
+
+    const meta = await this.metasRepository.findOne({
+  where: {
+    topico: {
+      id: createProgressoDto.topicoId
+    }
+  },
+  relations: ['topico']
+})
+
+    if(!meta) {
+      throw new NotFoundException('Meta não encontrada')
+    }
+
+    meta.horasAtual += createProgressoDto.horasEstudadas;
+    await this.metasRepository.save(meta)
+
+    const progresso = Math.min(
+      Math.round((meta?.horasAtual / meta?.horasMeta) * 100)
+    )
+
+    if (progresso >= 100){
+      topico.status = TopicosEnum.CONCLUIDO
+    } else if (progresso > 0) {
+      topico.status = TopicosEnum.ESTUDANDO
+    }else {
+      topico.status = TopicosEnum.PENDENTE
+    }
+
+    await this.topicosRepository.save(topico)
+ 
     const progress = this.progressoRepository.create({
-      porcentagem: createProgressoDto.porcentagem,
+      porcentagem: progresso,
       horasEstudadas: createProgressoDto.horasEstudadas,
-      topico: {id: createProgressoDto.topicoId }
+      topico
     })
 
     if (!progress){
