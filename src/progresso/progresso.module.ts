@@ -12,6 +12,7 @@ import { TopicosModule } from 'src/topicos/topicos.module';
   imports: [
     TypeOrmModule.forFeature([Progresso]),
     TopicosModule,
-  ]
+  ],
+  exports: [ProgressoModule]
 })
 export class ProgressoModule {}

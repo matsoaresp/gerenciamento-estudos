@@ -40,14 +40,15 @@ export class TopicosService {
   async findAll() {
 
     return this.topicoRepository.find({
-      relations: ['materia']
+      relations: ['materia', 'progresso']
     })
   }
 
   async findOne(id: number) {
     const topico = await this.topicoRepository.findOne({
       where: {id},
-      relations: ['materia']
+      relations: ['materia', 'progresso'],
+      
     })
     if (!topico) {
       throw new NotFoundException('Topico não encontrado')
