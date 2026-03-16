@@ -9,7 +9,7 @@ export class Progresso {
 
     @OneToOne(() => Topico)
     @JoinColumn()
-    topico: Topico;
+    topico: Topico
 
     @Column({default: 0})
     porcentagem: number
