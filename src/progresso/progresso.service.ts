@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProgressoDto } from './dto/create-progresso.dto';
 import { UpdateProgressoDto } from './dto/update-progresso.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,25 +11,56 @@ export class ProgressoService {
   constructor(
     @InjectRepository(Progresso)
     private readonly progressoRepository: Repository<Progresso>,
-    
-  ){}
-  create(createProgressoDto: CreateProgressoDto) {
-     
+  ) {}
+
+  async create(createProgressoDto: CreateProgressoDto) {
+
+    const progress = this.progressoRepository.create({
+      porcentagem: createProgressoDto.porcentagem,
+      horasEstudadas: createProgressoDto.horasEstudadas,
+      topico: { id: createProgressoDto.topicoId }
+    });
+
+    return this.progressoRepository.save(progress);
   }
 
   findAll() {
-    return `This action returns all progresso`;
+    return this.progressoRepository.find({
+      relations: ['topico']
+    });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} progresso`;
+    return this.progressoRepository.findOne({
+      where: { id },
+      relations: ['topico']
+    });
   }
 
-  update(id: number, updateProgressoDto: UpdateProgressoDto) {
-    return `This action updates a #${id} progresso`;
+  async update(id: number, updateProgressoDto: UpdateProgressoDto) {
+
+    const progress = await this.progressoRepository.preload({
+      id,
+      ...updateProgressoDto
+    });
+
+    if (!progress) {
+      throw new NotFoundException('Dado do progresso não encontrado');
+    }
+
+    return this.progressoRepository.save(progress);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} progresso`;
+  async remove(id: number) {
+
+    const progress = await this.progressoRepository.findOne({
+      where: { id }
+    });
+
+    if (!progress) {
+      throw new NotFoundException('Progresso não encontrado');
+    }
+
+    return this.progressoRepository.remove(progress);
   }
 }

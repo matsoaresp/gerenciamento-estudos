@@ -5,12 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Progresso } from './entities/progresso.entity';
 import { TopicosEnum } from 'src/topicos/enum/topicos.enum';
 import { TopicosModule } from 'src/topicos/topicos.module';
+import { Topico } from 'src/topicos/entities/topico.entity';
 
 @Module({
   controllers: [ProgressoController],
   providers: [ProgressoService],
   imports: [
-    TypeOrmModule.forFeature([Progresso]),
+    TypeOrmModule.forFeature([Progresso, Topico]),
     TopicosModule,
   ]
 })
