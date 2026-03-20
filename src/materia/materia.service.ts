@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Materia } from './entities/materia.entity';
 import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
+import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 
 @Injectable()
 export class MateriaService {
@@ -15,9 +16,9 @@ export class MateriaService {
     private readonly userService: UserService
 
   ) {}
-  async create(createMateriaDto: CreateMateriaDto){
+  async create(createMateriaDto: CreateMateriaDto, tokenPayloadDto: TokenPayloadDto){
 
-    const user = await this.userService.findOne(createMateriaDto.userId)
+    const user = await this.userService.findOne(tokenPayloadDto.sub)
 
     if (!user){
       throw new NotFoundException('Usuario não encontrado no Banco')
@@ -25,7 +26,7 @@ export class MateriaService {
     const materia = this.materiaRepository.create({ 
       nome: createMateriaDto.nome,
       descricao: createMateriaDto.descricao,
-      user,
+      user: user,
       
   })
     return await this.materiaRepository.save(materia)
