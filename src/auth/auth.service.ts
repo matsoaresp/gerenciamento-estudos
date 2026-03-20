@@ -1,25 +1,59 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/login.dto';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { LoginDto } from './dto/login.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/user/entities/user.entity';
+import { Repository } from 'typeorm';
+import jwtConfig from './config/jwt.config';
+import type { ConfigType } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { HashingService } from './hashing/hashing.service';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    private readonly hashingService: HashingService,
+    @Inject(jwtConfig.KEY)
+    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
+    private readonly jwtService: JwtService
+  ){}
+  async login(loginDto: LoginDto) {
+    
+    let passwordValid = false;
+    const user = await this.userRepository.findOneBy({
+      email: loginDto.email,
+    });
 
-  findAll() {
-    return `This action returns all auth`;
-  }
+    if (!user){
+      throw new UnauthorizedException('Usuario não existe')
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+    passwordValid = await this.hashingService.compare(
+      loginDto.password,
+      user.password
+    )
+    
+    if (!passwordValid){
+      throw new UnauthorizedException('Senha inválida')
+    }
 
-  update(id: number) {
-    return `This action updates a #${id} auth`;
-  }
+    const accesToken = await this.jwtService.signAsync(
+      {
+        sub: user.id,
+        email: user.email,
+      },
+      {
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+        audience: this.jwtConfiguration.audience,
+        issuer: this.jwtConfiguration.issuer,
+        secret: this.jwtConfiguration.secret,
+        expiresIn: this.jwtConfiguration.jwtTtl,
+      },
+    );
+
+      return {
+        accesToken,
+      };
   }
 }
