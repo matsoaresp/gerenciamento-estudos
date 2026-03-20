@@ -1,4 +1,4 @@
-import bcrypt from "node_modules/bcryptjs/umd/types";
+import * as bcrypt from 'bcryptjs';
 import { HashingService } from "./hashing.service";
 
 

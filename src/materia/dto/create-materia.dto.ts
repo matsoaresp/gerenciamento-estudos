@@ -10,6 +10,4 @@ export class CreateMateriaDto {
     @IsString()
     descricao?: string;
 
-    @IsNumber()
-    userId: number;
 }

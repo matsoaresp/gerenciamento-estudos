@@ -42,12 +42,12 @@ export class ProgressoService {
     if(!meta) {
       throw new NotFoundException('Meta não encontrada')
     }
-
+    
     meta.horasAtual += createProgressoDto.horasEstudadas;
     await this.metasRepository.save(meta)
 
     const progresso = Math.min(
-      Math.round((meta?.horasAtual / meta?.horasMeta) * 100)
+      Math.round((meta?.horasAtual / meta?.horasMeta) * 100),100
     )
 
     if (progresso >= 100){
