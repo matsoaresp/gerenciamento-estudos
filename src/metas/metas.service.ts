@@ -32,7 +32,7 @@ export class MetasService {
     })
 
     if (!meta){
-      throw new NotFoundException('Erro ao criar tarefa')
+      throw new NotFoundException('Erro ao criar meta')
     }
 
    return await this.metasRepository.save(meta)
