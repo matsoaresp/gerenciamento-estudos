@@ -8,7 +8,7 @@ export class CreateMateriaDto {
 
     @IsNotEmpty()
     @IsString()
-    descricao: string;
+    descricao?: string;
 
     @IsNumber()
     userId: number;
