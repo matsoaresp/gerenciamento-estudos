@@ -20,6 +20,7 @@ export class MateriaService {
 
     const user = await this.userService.findOne(tokenPayloadDto.sub)
 
+    console.log(tokenPayloadDto)
     if (!user){
       throw new NotFoundException('Usuario não encontrado no Banco')
     }
