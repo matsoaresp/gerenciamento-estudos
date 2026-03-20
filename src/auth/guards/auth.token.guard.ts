@@ -40,7 +40,7 @@ export class AuthTokenGuard implements CanActivate {
             );
             request[REQUEST_TOKEN_PAYLOAD_KEY] = payload;
         }catch(error) {
-          throw new UnauthorizedException('Falha ao logar!')
+          throw new UnauthorizedException('Usuario não logado!')
         }
         return true;
     }
