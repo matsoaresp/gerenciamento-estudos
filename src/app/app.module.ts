@@ -9,6 +9,8 @@ import { UserService } from 'src/user/user.service';
 import { TopicosModule } from 'src/topicos/topicos.module';
 import { ProgressoModule } from 'src/progresso/progresso.module';
 import { MetasModule } from 'src/metas/metas.module';
+import { ConfigModule } from '@nestjs/config';
+import jwtConfig from 'src/auth/config/jwt.config';
 
 @Module({
   imports: [
@@ -17,6 +19,10 @@ import { MetasModule } from 'src/metas/metas.module';
     TopicosModule,
     ProgressoModule,
     MetasModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [jwtConfig],
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
