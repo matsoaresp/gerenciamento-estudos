@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import { HashingService } from 'src/auth/hashing/hashing.service';
 
 @Injectable()
 export class UserService {
@@ -11,11 +12,31 @@ export class UserService {
 
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly hashService: HashingService,
   ){}
   async create(createUserDto: CreateUserDto) {
 
-    
-    const create = this.userRepository.create(createUserDto);
+    const passwordHash = await this.hashService.hash(
+      createUserDto.password
+    )
+
+    const userData = {
+      nome: createUserDto.nome,
+      email: createUserDto.email,
+      password: passwordHash,
+    }
+  
+    const existUser = await this.userRepository.findOne({
+      where: {
+        nome: createUserDto.nome,
+        email: createUserDto.email,
+      }
+    })
+
+    if (existUser){
+      throw new UnauthorizedException('Usuario já cadastrado')
+    }
+    const create = this.userRepository.create(userData);
     return await this.userRepository.save(create);
   }
 

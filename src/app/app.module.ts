@@ -11,6 +11,7 @@ import { ProgressoModule } from 'src/progresso/progresso.module';
 import { MetasModule } from 'src/metas/metas.module';
 import { ConfigModule } from '@nestjs/config';
 import jwtConfig from 'src/auth/config/jwt.config';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import jwtConfig from 'src/auth/config/jwt.config';
     TopicosModule,
     ProgressoModule,
     MetasModule,
+    AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [jwtConfig],

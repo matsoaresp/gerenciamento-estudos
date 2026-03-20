@@ -4,6 +4,7 @@ import { MateriaController } from './materia.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Materia } from './entities/materia.entity';
 import { UserModule } from 'src/user/user.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   controllers: [MateriaController],
@@ -11,6 +12,7 @@ import { UserModule } from 'src/user/user.module';
   imports: [
     TypeOrmModule.forFeature([Materia]),
     UserModule,
+    AuthModule,
   ],
   exports: [MateriaService]
 })
